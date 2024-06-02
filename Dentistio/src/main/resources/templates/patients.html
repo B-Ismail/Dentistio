@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Patients</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+</head>
+<body>
+<h1>Patients</h1>
+
+<form action="#" th:action="@{/patients/searchPatient}" method="get">
+    <input type="text" name="search" placeholder="Search patients">
+    <button type="submit">Search</button>
+</form>
+
+<form action="#" th:action="@{/patients/filterPatient}" method="get">
+    <select name="filter">
+        <option value="unpaid">Unpaid</option>
+        <option value="needsMoreOperations">Needs More Operations</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<form action="#" th:action="@{/patients/filterByDate}" method="get">
+    <label for="dateOrder">Filter by Next Visit Date:</label>
+    <select name="dateOrder" id="dateOrder">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<a th:href="@{/patients/addPatientForm}"><button type="button">Add Patient</button></a>
+
+<!-- Refresh button form -->
+<form action="#" th:action="@{/patients}" method="get">
+    <button type="submit">Refresh</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Paid</th>
+        <th>Needs More Operations</th>
+        <th>Next Visit Date</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="patient : ${patients}">
+        <td th:text="${patient.id}"></td>
+        <td th:text="${patient.firstName}"></td>
+        <td th:text="${patient.lastName}"></td>
+        <td th:text="${patient.age}"></td>
+        <td th:text="${patient.paid.name() == 'PAID' ? 'Yes' : (patient.paid.name() == 'UNPAID' ? 'No' : 'NaN')}"></td>
+        <td th:text="${patient.needsMoreOperations.name() == 'NEEDS_MORE_OPERATIONS' ? 'Yes' : (patient.needsMoreOperations.name() == 'NO_OPERATIONS_NEEDED' ? 'No' : 'NaN')}"></td>
+        <td th:text="${#dates.format(patient.lastVisitDate, 'dd-MM-yyyy')}"></td> <!-- Added next visit date -->
+        <td>
+            <a th:href="@{/patients/viewPatient/{id}(id=${patient.id})}"><button type="button">View</button></a>
+            <a th:href="@{/patients/editPatient/{id}(id=${patient.id})}"><button type="button">Edit</button></a>
+            <form th:action="@{/patients/deletePatient}" method="post" style="display:inline">
+                <input type="hidden" name="id" th:value="${patient.id}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(patients)}">
+        <td colspan="8">No patients found</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Patient</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/patients">Patients</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/login">Login</a></li>
+    </ul>
+</nav>
+<div>
+    <h1>Edit Patient</h1>
+    <form th:action="@{/patients/updatePatient/{id}(id=${patient.id})}" method="post">
+        <input type="hidden" id="id" name="id" th:value="${patient.id}">
+
+        <div>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" th:value="${patient.firstName}" required>
+        </div>
+
+        <div>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" th:value="${patient.lastName}" required>
+        </div>
+
+        <div>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" th:value="${patient.age}">
+        </div>
+
+        <div>
+            <label for="paid">Paid:</label>
+            <select id="paid" name="paid">
+                <option value="PAID" th:selected="${patient.paid == 'PAID'}">Yes</option>
+                <option value="UNPAID" th:selected="${patient.paid == 'UNPAID'}">No</option>
+                <option value="NO_INFO" th:selected="${patient.paid == 'NO_INFO'}">NaN</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="needsMoreOperations">Needs More Operations:</label>
+            <select id="needsMoreOperations" name="needsMoreOperations">
+                <option value="NEEDS_MORE_OPERATIONS" th:selected="${patient.needsMoreOperations == 'NEEDS_MORE_OPERATIONS'}">Yes</option>
+                <option value="NO_OPERATIONS_NEEDED" th:selected="${patient.needsMoreOperations == 'NO_OPERATIONS_NEEDED'}">No</option>
+                <option value="NO_INFO" th:selected="${patient.needsMoreOperations == 'NO_INFO'}">NaN</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="lastVisitDate">Next Visit Date:</label>
+            <input type="date" id="lastVisitDate" name="lastVisitDate" th:value="${#dates.format(patient.lastVisitDate, 'yyyy-MM-dd')}">
+        </div>
+
+        <div>
+            <label for="notes">Notes:</label>
+            <textarea id="notes" name="notes" th:text="${patient.notes}"></textarea>
+        </div>
+
+        <div>
+            <button type="submit">Confirm</button>
+            <button type="button" onclick="window.location.href='/patients'">Cancel</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

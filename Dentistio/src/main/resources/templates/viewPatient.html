@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Patient</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+    <style>
+        .editable {
+            background-color: #f0f0f0;
+        }
+
+        @media print {
+            /* Hide elements during print */
+            nav, .no-print, .add-visit-form, .edit-buttons, .delete-form, .back-button, .print-button, h1 {
+                display: none;
+            }
+            /* Style for print header */
+            .print-header {
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media screen {
+            /* Style elements normally for screen */
+            .print-area {
+                padding: 20px;
+            }
+            .print-header {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        function makeEditable(rowId) {
+            var row = document.getElementById(rowId);
+            var inputs = row.querySelectorAll('input, select');
+            inputs.forEach(function(input) {
+                if (input.name !== 'visitDate') {
+                    input.removeAttribute('readonly');
+                    input.classList.add('editable');
+                }
+            });
+        }
+
+        function confirmEdit(rowId) {
+            var row = document.getElementById(rowId);
+            var form = row.querySelector('form');
+            form.submit();
+        }
+
+        function printPatientInfo() {
+            window.print();
+        }
+    </script>
+</head>
+<body>
+<h1>View Patient</h1>
+
+<div class="print-area">
+    <!-- Print Header -->
+    <div class="print-header">
+        <h2>~~ Welcome to Dentistio ~~</h2>
+        <h3>Medical File</h3>
+    </div>
+
+    <div>
+        <h2>Patient Information</h2>
+        <p>First Name: <span th:text="${patient.firstName}"></span></p>
+        <p>Last Name: <span th:text="${patient.lastName}"></span></p>
+        <p>Age: <span th:text="${patient.age}"></span></p>
+        <p>Paid:
+            <span th:text="${patient.paid == T(ma.dentistio.dentistio.model.entity.PaymentStatus).PAID ? 'Yes' : (patient.paid == T(ma.dentistio.dentistio.model.entity.PaymentStatus).UNPAID ? 'No' : 'NaN')}"></span>
+        </p>
+        <p>Needs More Operations:
+            <span th:text="${patient.needsMoreOperations == T(ma.dentistio.dentistio.model.entity.OperationStatus).NEEDS_MORE_OPERATIONS ? 'Yes' : (patient.needsMoreOperations == T(ma.dentistio.dentistio.model.entity.OperationStatus).NO_OPERATIONS_NEEDED ? 'No' : 'NaN')}"></span>
+        </p>
+
+        <p>First Visit Date: <span th:text="${#dates.format(patient.firstVisitDate, 'yyyy-MM-dd')}"></span></p>
+        <p>Next Visit Date: <span th:text="${#dates.format(patient.lastVisitDate, 'yyyy-MM-dd')}"></span></p>
+        <p>Notes: <span th:text="${patient.notes}"></span></p>
+        <!-- Edit Patient Button -->
+        <a th:href="@{/patients/editPatient/{id}(id=${patient.id})}" class="no-print"><button type="button">Edit Patient</button></a>
+        <!-- Print Patient Button -->
+        <button type="button" class="print-button" onclick="printPatientInfo()">Print</button>
+    </div>
+
+    <!-- Add Visit Form -->
+    <div class="add-visit-form">
+        <h2>Add Visit</h2>
+        <form th:action="@{/patients/addVisit}" method="post">
+            <input type="hidden" name="patientId" th:value="${patient.id}">
+            <div>
+                <label for="visitType">Visit Type:</label>
+                <select id="visitType" name="visitType">
+                    <option th:each="visitType : ${visitTypes}" th:value="${visitType}" th:text="${visitType}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" required>
+            </div>
+            <div>
+                <button type="submit">Confirm</button>
+                <a th:href="@{/patients/viewPatient/{id}(id=${patient.id})}"><button type="button">Cancel</button></a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Visits Table -->
+    <h2>Visits</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Visit Type</th>
+            <th>Visit Date</th>
+            <th>Price</th>
+            <th class="no-print">Edit</th>
+            <th class="no-print">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="visit : ${patient.visits}" th:id="${'visit-' + visit.id}">
+            <td th:text="${visit.id}"></td>
+            <td>
+                <form th:action="@{/patients/updateVisit}" method="post" style="display:inline">
+                    <input type="hidden" name="visitId" th:value="${visit.id}">
+                    <input type="hidden" name="patientId" th:value="${patient.id}">
+                    <select name="visitType" readonly>
+                        <option th:each="type : ${visitTypes}" th:value="${type}" th:text="${type}" th:selected="${type == visit.visitType}"></option>
+                    </select>
+                    <input type="date" name="visitDate" th:value="${#dates.format(visit.visitDate, 'yyyy-MM-dd')}" readonly>
+                    <input type="number" name="price" th:value="${visit.price}" readonly>
+                    <div class="edit-buttons no-print">
+                        <button type="button" th:onclick="'makeEditable(\'visit-' + ${visit.id} + '\')'">Edit</button>
+                        <button type="button" th:onclick="'confirmEdit(\'visit-' + ${visit.id} + '\')'">Confirm</button>
+                    </div>
+                </form>
+            </td>
+            <td class="no-print">
+                <form th:action="@{/patients/deleteVisit}" method="post" style="display:inline">
+                    <input type="hidden" name="visitId" th:value="${visit.id}">
+                    <input type="hidden" name="patientId" th:value="${patient.id}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a th:href="@{/patients}" class="back-button"><button type="button">Back to Patients</button></a>
+</body>
+</html>
