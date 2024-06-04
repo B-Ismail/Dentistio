@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>List Employees</title>
+</head>
+<body>
+<div class="d-flex">
+    <div th:insert="base :: aside"> </div>
+
+    <div class="main-content w-100 m-3">
+        <h1 class="mb-4 mt-2">Liste des Employés</h1>
+
+        <div class="row mb-3">
+            <div class="col-md-6 d-flex align-items-center">
+                <form action="#" th:action="@{/employees/searchEmployee}" method="get" class="d-flex align-items-center w-100">
+                    <input type="text" name="search" placeholder="Search employees" class="form-control me-2" style="flex: 0 0 60%;">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 d-flex">
+                <form action="#" th:action="@{/employees}" method="get" class="me-2">
+                    <button type="submit" class="btn btn-secondary">Refresh</button>
+                </form>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end">
+                <a th:href="@{/employees/addEmployeeForm}" class="btn btn-success">Add Employee</a>
+            </div>
+        </div>
+
+        <div class="container-fluid mb-2">
+            <table class="table table-striped table-bordered">
+                <thead class="bg-dark text-white">
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Date Debut</th>
+                    <th>Age</th>
+                    <th>Salaire</th>
+                    <th>Numero Tel</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ali</td>
+                    <td>Ben Salah</td>
+                    <td>01-01-2020</td>
+                    <td>30</td>
+                    <td>$3000</td>
+                    <td>0612345678</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary btn-sm mx-2">View</a>
+                            <a href="#" class="btn btn-secondary btn-sm mx-2">Edit</a>
+                            <form action="#" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-danger btn-sm mx-2">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Fatima</td>
+                    <td>El Amrani</td>
+                    <td>15-03-2019</td>
+                    <td>28</td>
+                    <td>$3200</td>
+                    <td>0698765432</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary btn-sm mx-2">View</a>
+                            <a href="#" class="btn btn-secondary btn-sm mx-2">Edit</a>
+                            <form action="#" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-danger btn-sm mx-2">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Hassan</td>
+                    <td>Alami</td>
+                    <td>22-07-2018</td>
+                    <td>32</td>
+                    <td>$3500</td>
+                    <td>0654123789</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary btn-sm mx-2">View</a>
+                            <a href="#" class="btn btn-secondary btn-sm mx-2">Edit</a>
+                            <form action="#" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-danger btn-sm mx-2">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Layla</td>
+                    <td>El Fassi</td>
+                    <td>11-11-2017</td>
+                    <td>45</td>
+                    <td>$4000</td>
+                    <td>0789123456</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary btn-sm mx-2">View</a>
+                            <a href="#" class="btn btn-secondary btn-sm mx-2">Edit</a>
+                            <form action="#" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-danger btn-sm mx-2">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(employees)}">
+                    <td colspan="8" class="text-center">No employees found</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${employees.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/employees(page=${employees.number - 1}, size=${employees.size})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, employees.totalPages)}" th:classappend="${i == employees.number + 1} ? 'active'">
+                        <a class="page-link" th:href="@{/employees(page=${i - 1}, size=${employees.size})}" th:text="${i}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${employees.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/employees(page=${employees.number + 1}, size=${employees.size})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

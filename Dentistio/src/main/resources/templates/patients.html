@@ -1,77 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Patients</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>List Patient</title>
 </head>
 <body>
-<h1>Patients</h1>
+<div class="d-flex">
 
-<form action="#" th:action="@{/patients/searchPatient}" method="get">
-    <input type="text" name="search" placeholder="Search patients">
-    <button type="submit">Search</button>
-</form>
+    <div th:insert="base :: aside"> </div>
 
-<form action="#" th:action="@{/patients/filterPatient}" method="get">
-    <select name="filter">
-        <option value="unpaid">Unpaid</option>
-        <option value="needsMoreOperations">Needs More Operations</option>
-    </select>
-    <button type="submit">Filter</button>
-</form>
+    <div class="main-content w-100 m-3">
+        <h1 class="mb-4 mt-2">Liste des Patients</h1>
 
-<form action="#" th:action="@{/patients/filterByDate}" method="get">
-    <label for="dateOrder">Filter by Next Visit Date:</label>
-    <select name="dateOrder" id="dateOrder">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-    </select>
-    <button type="submit">Filter</button>
-</form>
+        <div class="row mb-5">
+            <div class="col-md-6 d-flex align-items-center">
+                <form action="#" th:action="@{/patients/searchPatient}" method="get" class="d-flex align-items-center w-100">
+                    <input type="text" name="search" placeholder="Search patients" class="form-control me-2" style="flex: 0 0 60%;">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-end">
+                <form action="#" th:action="@{/patients/filterPatient}" method="get" class="d-flex align-items-center me-4">
+                    <select name="filter" class="form-select me-3" style="flex: 0 0 70%;">
+                        <option value="unpaid">Unpaid</option>
+                        <option value="needsMoreOperations">Needs More Operations</option>
+                        <option value="noInfoPaid">No Info - Paid</option>
+                        <option value="noInfoOperations">No Info - Operations</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ms-1 me-5">Filter</button>
+                </form>
+                <form action="#" th:action="@{/patients/filterByDate}" method="get" class="d-flex align-items-center ms-4">
+                    <div class="d-flex align-items-center">
+                        <label for="dateOrder" class="form-label .me-0" style="min-width: 200px;">Filter by Next Visit Date:</label>
+                        <select name="dateOrder" id="dateOrder" class="form-select me-3 .ms-0" style="min-width: 150px;">
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary ms-3">Filter</button>
+                </form>
+            </div>
 
-<a th:href="@{/patients/addPatientForm}"><button type="button">Add Patient</button></a>
+        </div>
 
-<!-- Refresh button form -->
-<form action="#" th:action="@{/patients}" method="get">
-    <button type="submit">Refresh</button>
-</form>
+        <div class="row mb-5">
+            <div class="col-md-6 d-flex">
+                <form action="#" th:action="@{/patients}" method="get" class="me-2">
+                    <button type="submit" class="btn btn-secondary">Refresh</button>
+                </form>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end">
+                <a th:href="@{/patients/addPatientForm}" class="btn btn-success">Add Patient</a>
+            </div>
+        </div>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Age</th>
-        <th>Paid</th>
-        <th>Needs More Operations</th>
-        <th>Next Visit Date</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="patient : ${patients}">
-        <td th:text="${patient.id}"></td>
-        <td th:text="${patient.firstName}"></td>
-        <td th:text="${patient.lastName}"></td>
-        <td th:text="${patient.age}"></td>
-        <td th:text="${patient.paid.name() == 'PAID' ? 'Yes' : (patient.paid.name() == 'UNPAID' ? 'No' : 'NaN')}"></td>
-        <td th:text="${patient.needsMoreOperations.name() == 'NEEDS_MORE_OPERATIONS' ? 'Yes' : (patient.needsMoreOperations.name() == 'NO_OPERATIONS_NEEDED' ? 'No' : 'NaN')}"></td>
-        <td th:text="${#dates.format(patient.lastVisitDate, 'dd-MM-yyyy')}"></td> <!-- Added next visit date -->
-        <td>
-            <a th:href="@{/patients/viewPatient/{id}(id=${patient.id})}"><button type="button">View</button></a>
-            <a th:href="@{/patients/editPatient/{id}(id=${patient.id})}"><button type="button">Edit</button></a>
-            <form th:action="@{/patients/deletePatient}" method="post" style="display:inline">
-                <input type="hidden" name="id" th:value="${patient.id}">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(patients)}">
-        <td colspan="8">No patients found</td>
-    </tr>
-    </tbody>
-</table>
+        <div class="container-fluid mb-2">
+            <table class="table table-striped table-bordered">
+                <thead class="bg-dark text-white">
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Paid</th>
+                    <th class="text-center">Needs More Operations</th>
+                    <th>Next Visit Date</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="patient : ${patients}">
+                    <td th:text="${patient.id}"></td>
+                    <td th:text="${patient.firstName}"></td>
+                    <td th:text="${patient.lastName}"></td>
+                    <td th:text="${patient.age}"></td>
+                    <td th:text="${patient.paid.name() == 'PAID' ? 'Yes' : (patient.paid.name() == 'UNPAID' ? 'No' : 'NaN')}"></td>
+                    <td class="text-center" th:text="${patient.needsMoreOperations.name() == 'NEEDS_MORE_OPERATIONS' ? 'Yes' : (patient.needsMoreOperations.name() == 'NO_OPERATIONS_NEEDED' ? 'No' : 'NaN')}"></td>
+                    <td th:text="${#dates.format(patient.lastVisitDate, 'dd-MM-yyyy')}"></td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a th:href="@{/patients/viewPatient/{id}(id=${patient.id})}" class="btn btn-primary btn-sm mx-2">View</a>
+                            <a th:href="@{/patients/editPatient/{id}(id=${patient.id})}" class="btn btn-secondary btn-sm mx-2">Edit</a>
+                            <form th:action="@{/patients/deletePatient}" method="post" style="display:inline">
+                                <input type="hidden" name="id" th:value="${patient.id}">
+                                <button type="submit" class="btn btn-danger btn-sm mx-2" onclick="return confirmDelete()">Delete</button>
+                            </form>
 
+                            <script>
+                                function confirmDelete() {
+                                    return confirm('Are you sure you want to delete this patient?');
+                                }
+                            </script>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(patients)}">
+                    <td colspan="8" class="text-center">No patients found</td>
+                </tr>
+                </tbody>
+                <tr>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${patients.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/patients(page=${patients.number - 1}, size=${patients.size})}">Previous</a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(1, patients.totalPages)}"
+                            th:classappend="${i == patients.number + 1} ? 'active'">
+                            <a class="page-link" th:href="@{/patients(page=${i - 1}, size=${patients.size})}" th:text="${i}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${patients.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/patients(page=${patients.number + 1}, size=${patients.size})}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+                </tr>
+            </table>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

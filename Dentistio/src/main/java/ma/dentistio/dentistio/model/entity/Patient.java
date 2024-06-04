@@ -22,10 +22,10 @@ public class Patient {
     private int age;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paid = PaymentStatus.NO_INFO;
+    private PaymentStatus paid ;
 
     @Enumerated(EnumType.STRING)
-    private OperationStatus needsMoreOperations = OperationStatus.NO_INFO;
+    private OperationStatus needsMoreOperations;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

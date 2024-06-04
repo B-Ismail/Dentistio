@@ -1,21 +1,89 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <title th:text="${title}">Home</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
 </head>
 <body>
-<nav>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/patients">Patients</a></li>
-        <li><a href="/register">Register</a></li>
-        <li><a href="/login">Login</a></li>
-    </ul>
-</nav>
-<div>
-    <h1>Welcome to Dentistio</h1>
-    <p>Your go-to place for dental care.</p>
+<div class="d-flex ">
+    <div th:insert="base :: aside"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Headers Column -->
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <div class="m-2">
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                    <h1>Welcome to Dentistio</h1>
+                </div>
+            </div>
+            <!-- Stats Column -->
+            <div class="col-md-6 mt-5">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Patients</h5>
+                                <p class="display-4" th:text="${totalPatients}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Today's Visits</h5>
+                                <p class="display-4" th:text="${upcomingVisits}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Paid Patients</h5>
+                                <p class="display-4" th:text="${paidPatients}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Unpaid Patients</h5>
+                                <p class="display-4" th:text="${unpaidPatients}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <h5 class="card-title">Patients Needing More Operations</h5>
+                                <p class="display-4" th:text="${patientsNeedingMoreOperations}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <h5 class="card-title">Patients with No Information</h5>
+                                <p class="display-4" th:text="${patientsNoInfo}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
