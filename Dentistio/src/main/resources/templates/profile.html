@@ -32,58 +32,56 @@
 </head>
 <body>
 <div class="d-flex">
-    <div th:insert="base :: aside"></div>
+    <div th:insert="~{base :: aside}"></div>
 
     <div class="container profile-container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card profile-card">
                     <div class="profile-header text-center">
-                        <h2>Dr. Dentist11 Lastname</h2>
+                        <h2 th:text="${dentist.name}">Dr. Dentist11 Lastname</h2>
                         <p>Dentist Profile</p>
                     </div>
                     <div class="profile-body">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <strong>First Name:</strong> <span>Dentist11</span>
+                                <strong>First Name:</strong> <span th:text="${firstName}">Dentist11</span>
                             </div>
                             <div class="col-md-6">
-                                <strong>Last Name:</strong> <span>Lastname</span>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <strong>Specialty:</strong> <span>Orthodontics</span>
-                            </div>
-                            <div class="col-md-6">
-                                <strong>Years of Experience:</strong> <span>16</span>
+                                <strong>Last Name:</strong> <span th:text="${lastName}">Lastname</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <strong>Phone Number:</strong> <span>061XXX678</span>
+                                <strong>Specialty:</strong> <span th:text="${dentist.specialty}">Orthodontics</span>
                             </div>
                             <div class="col-md-6">
-                                <strong>Email:</strong> <span>dentist1.den@gmail.com</span>
+                                <strong>Years of Experience:</strong> <span th:text="${dentist.yearsOfExperience}">16</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Phone Number:</strong> <span th:text="${dentist.phoneNumber}">061XXX678</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Email:</strong> <span th:text="${dentist.email}">dentist1.den@gmail.com</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <strong>Address:</strong> <span>123 Rue 159, Casablanca, Morocco</span>
+                                <strong>Address:</strong> <span th:text="${dentist.address}">123 Rue 159, Casablanca, Morocco</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <strong>Notes:</strong>
-                                <p>
-
-                                </p>
+                                <p th:text="${dentist.notes}"></p>
                             </div>
                         </div>
                     </div>
                     <div class="profile-footer text-center">
                         <a href="#" class="btn btn-warning">Edit Profile</a>
-                        <a href="#" class="btn btn-secondary">Back to Dashboard</a>
+                        <a href="/" class="btn btn-secondary">Back to Dashboard</a>
                     </div>
                 </div>
             </div>

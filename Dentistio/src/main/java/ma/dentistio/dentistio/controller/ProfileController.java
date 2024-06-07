@@ -1,6 +1,8 @@
 package ma.dentistio.dentistio.controller;
 
 import ma.dentistio.dentistio.model.entity.Dentist;
+import ma.dentistio.dentistio.repository.DentistRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,10 +10,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ProfileController {
 
-    @GetMapping("/profile")
+    private final DentistRepository dentistRepository;
+
+    @Autowired
+    public ProfileController(DentistRepository dentistRepository) {
+        this.dentistRepository = dentistRepository;
+    }
+
+    @GetMapping("/uprofile")
     public String profile(Model model) {
-        Dentist dentist = getCurrentLoggedInDentist();
+        Dentist dentist = dentistRepository.findAll().get(0); // You can replace this logic to get the current logged-in dentist
+        String[] nameParts = dentist.getName().split(" ");
         model.addAttribute("dentist", dentist);
+        model.addAttribute("firstName", nameParts.length > 0 ? nameParts[0] : "");
+        model.addAttribute("lastName", nameParts.length > 1 ? nameParts[1] : "");
         return "profile";
     }
 

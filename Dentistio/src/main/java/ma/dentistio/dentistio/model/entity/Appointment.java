@@ -8,17 +8,15 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Dentist {
+public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String specialty;
-    private int yearsOfExperience;
-    private String email;
-    private String phoneNumber;
-    private String address;  // new
-    private String notes;
+    private String date;
+    private String time;
+    private String description;
+    private Long patientId;
+    private Long dentistId;
 }
